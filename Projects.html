@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Dr. Mohammed H. Talafha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="min-h-screen p-6 bg-cover bg-center" style="background-image: linear-gradient(rgba(17,24,39,.72), rgba(17,24,39,.72)), url('images/background1.jpeg');">
+    <div class="max-w-6xl mx-auto">
+      <header class="bg-white/95 shadow-2xl rounded-2xl p-8 mb-8 text-center">
+        <h1 class="text-4xl font-bold text-indigo-700 mb-2">GitHub Projects</h1>
+        <p class="text-gray-600 max-w-3xl mx-auto">
+          Selected GitHub repositories for research software, solar-physics modeling, astronomy applications, and outreach activities. Use the button below to add a new project card with a GitHub link.
+        </p>
+
+        <nav class="flex justify-center flex-wrap gap-x-6 gap-y-2 font-semibold mt-6">
+          <a href="index.html" class="hover:underline">Home</a>
+          <a href="About.html" class="hover:underline">About</a>
+          <a href="Activities.html" class="hover:underline">Activities</a>
+          <a href="Supervision.html" class="hover:underline">Supervision</a>
+          <a href="Grants.html" class="hover:underline">Grants</a>
+          <a href="Projects.html" class="text-indigo-600 hover:underline">Projects</a>
+          <a href="Publications.html" class="hover:underline">Publications</a>
+          <a href="Contact.html" class="hover:underline">Contact</a>
+        </nav>
+      </header>
+
+      <section class="bg-white/95 shadow-2xl rounded-2xl p-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-semibold text-indigo-600">Project Cards</h2>
+            <p class="text-sm text-gray-600">The main cards are listed below. Extra cards added using the button are saved in your browser through local storage.</p>
+          </div>
+          <button id="openAddModal" class="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white font-semibold px-5 py-3 rounded-xl shadow hover:bg-indigo-700 transition">
+            <i class="fa-solid fa-plus"></i>
+            Add New Card
+          </button>
+        </div>
+
+        <div id="projectsGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="addModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-indigo-700">Add GitHub Project</h2>
+        <button id="closeAddModal" class="text-gray-500 hover:text-gray-800 text-2xl" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="projectForm" class="space-y-4">
+        <div>
+          <label for="projectTitle" class="block font-semibold mb-1">Project title</label>
+          <input id="projectTitle" type="text" required placeholder="Example: PyNucNet" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label for="projectDescription" class="block font-semibold mb-1">Short description</label>
+          <textarea id="projectDescription" required rows="3" placeholder="Briefly describe the project." class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+        <div>
+          <label for="projectLink" class="block font-semibold mb-1">GitHub link</label>
+          <input id="projectLink" type="url" required placeholder="https://github.com/username/repository" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label for="projectTag" class="block font-semibold mb-1">Tag / field</label>
+          <input id="projectTag" type="text" placeholder="Solar Physics, Python, Web App, ML, etc." class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" id="cancelAddModal" class="px-5 py-3 rounded-xl border font-semibold hover:bg-gray-100">Cancel</button>
+          <button type="submit" class="px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700">Save Card</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const defaultProjects = [
+      {
+        title: "NucNetPy",
+        description: "A Python implementation of NucNet Tools for nuclear-reaction networks and single-zone nucleosynthesis calculations using JINA XML data.",
+        link: "https://github.com/mtalafha90/NucNetPy",
+        tag: "Nuclear Astrophysics"
+      },
+      {
+        title: "PINNs_WSO",
+        description: "Physics-informed neural-network models that use WSO magnetic-field data to study solar surface flux transport and polar-field evolution.",
+        link: "https://github.com/mtalafha90/PINNs_WSO",
+        tag: "PINNs / Solar Physics"
+      },
+      {
+        title: "SO-PHI-SDO-HMI",
+        description: "Tools for comparing and merging Solar Orbiter PHI and SDO/HMI observations to study large-scale solar magnetic-field measurements.",
+        link: "https://github.com/mtalafha90/SO-PHI-SDO-HMI",
+        tag: "Solar Observations"
+      },
+      {
+        title: "YU_WinterSchool_2026",
+        description: "Website and materials for the 2026 Yarmouk University Winter School, including event information and participant resources.",
+        link: "https://github.com/mtalafha90/YU_WinterSchool_2026",
+        tag: "Education / Outreach"
+      },
+      {
+        title: "Binary_Workshop_2026",
+        description: "Website and organizational resources for the 2026 workshop on binary and multiple stellar systems, eclipsing binaries, and transiting exoplanets.",
+        link: "https://github.com/mtalafha90/Binary_Workshop_2026",
+        tag: "Workshop / Astronomy"
+      },
+      {
+        title: "Incorporation Nonlinearities in Algebraic Model",
+        description: "Research code for incorporating nonlinear solar-cycle effects into an algebraic model of magnetic-field evolution and cycle modulation.",
+        link: "https://github.com/mtalafha90/Incorporation-Nonlinearities-in-Algebric-Model",
+        tag: "Solar Cycle Modeling"
+      },
+      {
+        title: "SFT",
+        description: "Surface flux transport modeling tools for simulating the evolution of the Sun’s large-scale photospheric magnetic field.",
+        link: "https://github.com/mtalafha90/SFT",
+        tag: "Surface Flux Transport"
+      }
+    ];
+
+    const storageKey = "talafhaGithubProjects";
+    const grid = document.getElementById("projectsGrid");
+    const modal = document.getElementById("addModal");
+    const form = document.getElementById("projectForm");
+
+    function getProjects() {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      return [...defaultProjects, ...saved];
+    }
+
+    function saveProject(project) {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      saved.push(project);
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+    }
+
+    function projectCard(project, index) {
+      return `
+        <article class="bg-gray-100 rounded-2xl shadow-sm p-6 border border-gray-200 hover:shadow-lg transition flex flex-col">
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl">
+              <i class="fa-brands fa-github"></i>
+            </div>
+            <span class="text-xs font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full">${escapeHTML(project.tag || "GitHub")}</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">${escapeHTML(project.title)}</h3>
+          <p class="text-gray-600 mb-5 flex-grow">${escapeHTML(project.description)}</p>
+          <a href="${escapeAttr(project.link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-semibold px-4 py-3 rounded-xl hover:bg-black transition">
+            Open on GitHub
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </article>
+      `;
+    }
+
+    function renderProjects() {
+      grid.innerHTML = getProjects().map(projectCard).join("");
+    }
+
+    function openModal() {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.getElementById("projectTitle").focus();
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      form.reset();
+    }
+
+    function escapeHTML(text) {
+      return String(text).replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;","\"":"&quot;"}[char]));
+    }
+
+    function escapeAttr(text) {
+      return escapeHTML(text).replace(/`/g, "&#096;");
+    }
+
+    document.getElementById("openAddModal").addEventListener("click", openModal);
+    document.getElementById("closeAddModal").addEventListener("click", closeModal);
+    document.getElementById("cancelAddModal").addEventListener("click", closeModal);
+    modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal();
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const project = {
+        title: document.getElementById("projectTitle").value.trim(),
+        description: document.getElementById("projectDescription").value.trim(),
+        link: document.getElementById("projectLink").value.trim(),
+        tag: document.getElementById("projectTag").value.trim() || "GitHub"
+      };
+      saveProject(project);
+      renderProjects();
+      closeModal();
+    });
+
+    renderProjects();
+  </script>
+</body>
+</html>
